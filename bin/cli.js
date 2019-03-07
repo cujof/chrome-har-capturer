@@ -30,6 +30,7 @@ program
     .option('-e, --retry-delay <ms>', 'time to wait before starting a new attempt')
     .option('-d, --post-data <bytes>', 'maximum POST data size to be returned')
     .option('-l, --parallel <n>', 'load <n> URLs in parallel')
+    .option('-s, --screenshot', 'save screenshot when URL is loaded')
     .parse(process.argv);
 
 if (program.args.length === 0) {
@@ -95,7 +96,7 @@ function postHook(url, client) {
     });
 }
 
-const {host, port, width, height, content, cache, timeout, retry, retryDelay, postData, parallel} = program;
+const {host, port, width, height, content, cache, timeout, retry, retryDelay, postData, parallel, screenshot} = program;
 CHC.run(program.args, {
     host, port,
     width, height,
@@ -105,7 +106,8 @@ CHC.run(program.args, {
     retry, retryDelay,
     postData,
     parallel,
-    preHook, postHook
+    preHook, postHook,
+    screenshot
 }).on('load', (url) => {
     log(`- ${prettify(url)} `);
     if (parallel) {
